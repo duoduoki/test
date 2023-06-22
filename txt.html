@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <style type="text/css" >
+    *{
+      padding: 0;
+      margin: 0;
+        font-family: "微软雅黑 Light";
+    }
+  ul,div{
+  border:0px solid #999;
+
+  }
+  #content {
+  height: 100vh; /* 设置高度为屏幕高度 */
+  min-height: 100%; /* 防止内容少时高度不够 */
+  width: 60%; /* 设置宽度为屏幕的60% */
+  background-color: #f2f2f2; /* 背景颜色，可根据需要修改 */
+  padding: 20px; /* 可根据需要添加内边距 */
+  box-sizing: border-box; /* 盒模型为border-box，包含padding和border在内的尺寸计算在内 */
+  margin: 0 auto;
+  }
+  #title{
+    ont-weight: bold;font-size: 28px; line-height: 70px;
+    letter-spacing:5px;
+      margin-top: 100px;
+      width: 100%;
+      border-bottom: 1px solid #333;
+  }
+  #context{
+      width: 80%;
+      margin:33px auto ;
+      min-height: 500px;
+      border: 0px saddlebrown solid;
+  }
+  #context p{
+         letter-spacing:2px;
+        font-size: 20px;
+        line-height: 45px;
+        border-bottom: dotted #333 1px;
+        color: #222;
+    }
+  </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<script>
+    function getParameterByName(name) {
+  var url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+  var results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+    var bookid=0;
+    var dlid=0;
+      $(document).ready(function() {
+          bookid=getParameterByName('bookid');
+          dlid=getParameterByName('dlid')
+      // 请求 JSON 文件并展示数据
+        $.ajax({
+          url: "http://localhost:8080/output.json",
+          dataType: "json",
+          success: function(data) {
+            parseJSON(data);
+          }
+        })
+        function parseJSON(json){
+            var title=json[bookid][0].list[dlid][1];
+            var txt='<p>&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp'+json[bookid][0].list[dlid][2]+'</p>';
+            txt=txt.replace(/\r\n/g, "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+           $('#title').html(title);
+           $('#p').html(txt);
+           $("#content").height($('#p').height()+500);
+        }
+      })
+      function  a(id){
+          window.location.href = 'http://localhost:8080/index.html?id='+id
+      }
+
+</script>
+<body>
+   <div id="content">
+       <div id="title">标题</div>
+       <div id="context">
+           <p id="p">sadaasdasadasdads</p>
+       </div>
+   </div>
+</body>
+
+</html>
