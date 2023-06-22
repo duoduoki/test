@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <style type="text/css" >
+    *{
+      padding: 0;
+      margin: 0;
+        font-family: "微软雅黑 Light";
+    }
+  ul,div{
+  border:0px solid #999;
+
+  }
+  #content {
+  height: 100vh; /* 设置高度为屏幕高度 */
+  min-height: 100%; /* 防止内容少时高度不够 */
+  width: 60%; /* 设置宽度为屏幕的60% */
+  background-color: #f2f2f2; /* 背景颜色，可根据需要修改 */
+  padding: 20px; /* 可根据需要添加内边距 */
+  box-sizing: border-box; /* 盒模型为border-box，包含padding和border在内的尺寸计算在内 */
+  margin: 0 auto;
+  }
+  #top{
+    width: 100%; height: 300px; margin-top:60px; margin-bottom: 10px;
+      border: 0px;
+      border-bottom: 1px solid #ccc;
+
+  }
+  #botoom{
+    width: 85%; height: 800px; margin: 10px auto; border-radius: 10px;
+    list-style: none;
+  }
+  #top-right,top_left{
+  }
+  #top-left{
+      float: left;
+      width: 150px;
+      height: 200px;
+      margin-left: 130px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 55px;
+      background-color: bisque;
+      border: 2px solid #666;
+  }
+   #top-right{
+      float: left;
+      width: 550px;
+      height: 200px;
+       margin-left: 100px;
+      margin-top: 55px;
+  }
+   .bkname{
+       ont-weight: bold;font-size: 28px; line-height: 70px;
+       letter-spacing:5px;
+   }
+   .bktime{
+       font-size: 16px;
+       font-weight: normal;
+       line-height: 30px;
+       letter-spacing:1px;
+   }
+   #botoom li{
+       height: 30px;
+       float: left;
+       width: 33%;
+       border-bottom:1px solid #000;
+       cursor: pointer;
+       margin-top: 30px;
+
+   }
+    #botoom li:hover{
+        font-weight: bolder;
+
+       border-bottom:1px dotted #000;
+   }
+  </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<script>
+    function getParameterByName(name) {
+  var url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+  var results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+// 示例使用
+
+
+      var bookid=0;
+      $(document).ready(function() {
+          bookid = getParameterByName('id');
+          var contentHeight = $("#top").width();
+
+      // 请求 JSON 文件并展示数据
+        $.ajax({
+          url: "http://localhost:8080/output.json",
+          dataType: "json",
+          success: function(data) {
+            parseJSON(data);
+          }
+        })
+        function parseJSON(json){
+            var newjson=json[bookid][0];
+            console.log(json)
+            $("#img").attr("src", newjson.img);
+            $("#bkname").html(newjson.title);
+            $("#bktime").html(newjson.newtime);
+            $("#bkwriter").html(newjson.writer);
+            var list=""
+            for(var i=1;i<newjson.list.length;i++) {
+                list+='<li onclick="gettxt('+bookid+','+i+')">'+newjson.list[i][1]+'</li>';
+            }
+            $('#botoom').html(list);
+
+        }
+      })
+function gettxt(bookid,i){
+                window.location.href = 'http://localhost:8080/txt.html?bookid='+bookid+'&dlid='+i;
+            }
+</script>
+<body>
+   <div id="content">
+     <div id="top">
+         <div id="top-left">
+             <img id="img" style="width: 150px;height: 200px" />
+         </div>
+         <div id="top-right">
+             <p class="bkname" id="bkname">书名</p>
+             <p class="bktime" id="bkwriter">作者</p>
+             <p class="bktime" id="bktime">更新时间</p>
+         </div>
+     </div>
+     <ul id="botoom">
+         <li>章节名称：章节</li>
+         <li>章节名称：章节</li>
+         <li>章节名称：章节</li>
+         <li>章节名称：章节</li>
+         <li>章节名称：章节</li>
+         <li>章节名称：章节</li>
+         <li>章节名称：章节</li>
+         <li>章节名称：章节</li>
+     </ul>
+   </div>
+</body>
+
+</html>
